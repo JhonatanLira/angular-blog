@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { dataFake } from 'src/app/data/dataFake';
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent {
-  photoCover: string="https://img.elo7.com.br/product/original/37EBEF7/painel-1x65cm-pantera-negra-wakanda-festa-expressa.jpg"
-  contentTitle:string="Minha notícia"
+  photoCover: string=""
+  contentTitle:string=""
   contentDescription:string="Olá, mundo!"
+  private id: string|null = "0"
 
   constructor(
     private route: ActivatedRoute
@@ -18,8 +19,16 @@ export class ContentComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe ( value =>
-        console.log(value.get("id"))
+       this.id = value.get("id")
     )
+    this.setValuesToComponent(this.id)
+  }
 
+  setValuesToComponent(id:string|null){
+    const result = dataFake.filter(article => article.id == id)[0]
+
+    this.contentTitle = result.title
+    this.contentDescription = result.description
+    this.photoCover = result.photoCover
   }
 }
